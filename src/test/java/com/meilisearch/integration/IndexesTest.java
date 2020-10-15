@@ -19,7 +19,7 @@ public class IndexesTest extends AbstractIT {
 	private TestData<Movie> testData;
 
 	@BeforeEach
-	public void initializeClient() {
+	public void initialize() {
 		setUp();
 		if (testData == null)
 			testData = this.getTestData(MOVIES_INDEX, Movie.class);
@@ -84,52 +84,6 @@ public class IndexesTest extends AbstractIT {
 		assert (Arrays.asList(indexUids).contains(indexUids[1]));
 		client.deleteIndex(indexUids[0]);
 		client.deleteIndex(indexUids[1]);
-	}
-
-	/**
-	 * Test waitForPendingUpdate
-	 */
-	@Test
-	public void testWaitForPendingUpdate() throws Exception {
-		String indexUid = "WaitForPendingUpdate";
-		Index index = client.createIndex(indexUid);
-
-		UpdateStatus updateInfo = this.gson.fromJson(
-			index.addDocuments(this.testData.getRaw()),
-			UpdateStatus.class
-		);
-
-		index.waitForPendingUpdate(updateInfo.getUpdateId());
-
-		UpdateStatus updateStatus = this.gson.fromJson(
-			index.getUpdate(updateInfo.getUpdateId()),
-			UpdateStatus.class
-		);
-
-		assertEquals("processed", updateStatus.getStatus());
-
-		client.deleteIndex(index.getUid());
-	}
-
-	/**
-	 * Test waitForPendingUpdate timeoutInMs
-	 */
-	@Test
-	public void testWaitForPendingUpdateTimoutInMs() throws Exception {
-		String indexUid = "WaitForPendingUpdateTimoutInMs";
-		Index index = client.createIndex(indexUid);
-
-		UpdateStatus updateInfo = this.gson.fromJson(
-			index.addDocuments(this.testData.getRaw()),
-			UpdateStatus.class
-		);
-
-		assertThrows(
-			Exception.class,
-			() -> index.waitForPendingUpdate(updateInfo.getUpdateId(), 0, 50)
-		);
-
-		client.deleteIndex(index.getUid());
 	}
 
 }
