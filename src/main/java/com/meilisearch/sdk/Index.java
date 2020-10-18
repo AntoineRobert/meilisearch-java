@@ -1,11 +1,12 @@
 package com.meilisearch.sdk;
 
+import java.io.Serializable;
+import java.util.Date;
+
 import com.google.gson.Gson;
+
 import lombok.Getter;
 import lombok.ToString;
-
-import java.util.Date;
-import java.io.Serializable;
 
 /**
  * Meilisearch index
@@ -31,6 +32,22 @@ public class Index implements Serializable {
 
 	@ToString.Exclude
 	Documents documents;
+
+	public String getUid() {
+		return uid;
+	}
+
+	public void setUid(String uid) {
+		this.uid = uid;
+	}
+
+	public String getPrimaryKey() {
+		return primaryKey;
+	}
+
+	public void setPrimaryKey(String primaryKey) {
+		this.primaryKey = primaryKey;
+	}
 
 	/**
 	 * Set the Meilisearch configuration for the index
@@ -142,8 +159,8 @@ public class Index implements Serializable {
 	/**
 	 * Wait for a pending update to be processed
 	 *
-	 * @param updateId ID of the index update
-	 * @param timeoutInMs number of milliseconds before throwing and Exception
+	 * @param updateId     ID of the index update
+	 * @param timeoutInMs  number of milliseconds before throwing and Exception
 	 * @param intervalInMs number of milliseconds before requesting the status again
 	 * @throws Exception If timeout is reached
 	 */
@@ -154,8 +171,8 @@ public class Index implements Serializable {
 	/**
 	 * Wait for a pending update to be processed
 	 *
-	 * @param updateId ID of the index update
-	 * @param timeoutInMs number of milliseconds before throwing an Exception
+	 * @param updateId     ID of the index update
+	 * @param timeoutInMs  number of milliseconds before throwing an Exception
 	 * @param intervalInMs number of milliseconds before requesting the status again
 	 * @throws Exception if timeout is reached
 	 */
@@ -166,14 +183,11 @@ public class Index implements Serializable {
 		long startTime = new Date().getTime();
 		long elapsedTime = 0;
 
-		while (!status.equals("processed")){
-			if (elapsedTime >= timeoutInMs){
+		while (!status.equals("processed")) {
+			if (elapsedTime >= timeoutInMs) {
 				throw new Exception();
 			}
-			updateStatus = gson.fromJson(
-				this.getUpdate(updateId), 
-				UpdateStatus.class
-			);
+			updateStatus = gson.fromJson(this.getUpdate(updateId), UpdateStatus.class);
 			status = updateStatus.getStatus();
 			Thread.sleep(intervalInMs);
 			elapsedTime = new Date().getTime() - startTime;
