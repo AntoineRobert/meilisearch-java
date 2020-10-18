@@ -55,11 +55,8 @@ public class AnnotationsHelper {
 			array.put(buildDocument(object, entityConfig, uid_entity));
 		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException | NoSuchFieldException | MeiliException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		System.out.println("Document array : " + array);
 
 		return array.toString();
 	}
@@ -140,8 +137,6 @@ public class AnnotationsHelper {
 
 		if (object instanceof Collection) {
 
-			System.out.println("is colection ");
-
 			Collection col = (Collection) object;
 
 			if (!col.isEmpty()) {
@@ -149,7 +144,6 @@ public class AnnotationsHelper {
 				Class<?> clazz = col.iterator().next().getClass();
 
 				String meiliEntityName = getEntityName(clazz);
-				System.out.println("is colection of " + meiliEntityName);
 
 				JSONArray array = new JSONArray();
 
@@ -165,8 +159,6 @@ public class AnnotationsHelper {
 
 		} else if (object instanceof Map) {
 
-			System.out.println("is Map ");
-
 			Map map = (Map) object;
 
 			if (!map.isEmpty()) {
@@ -175,8 +167,6 @@ public class AnnotationsHelper {
 				Object[] values = map.values().toArray();
 				Class<?> clazz = values[0].getClass();
 				String meiliEntityName = getEntityName(clazz);
-
-				System.out.println("is map of " + meiliEntityName);
 
 				JSONArray array = new JSONArray();
 

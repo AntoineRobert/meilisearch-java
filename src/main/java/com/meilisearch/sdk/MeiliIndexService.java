@@ -45,8 +45,6 @@ public class MeiliIndexService {
 
 	private void beginIndex(Object object, MeiliEntityConfig entityConfig) {
 
-		System.out.println("cache_config :: " + uid_Entity);
-
 		String document = AnnotationsHelper.buildDocuments(object, entityConfig, uid_Entity);
 
 		try {
